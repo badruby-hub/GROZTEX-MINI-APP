@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
       select: { chatId: true },
     });
 
-      const batches = chunkArray(users, 100);
+      const batches = chunkArray(users, 50);
 
      let totalSent = 0;
      let totalRemoved = 0;
