@@ -9,28 +9,25 @@ type RequestBody = {
   senderChatId?: number; //кто запустил рассылку
 };
 
-export async function POST(request: NextRequest) {
-  try {
-    const body: RequestBody = await request.json();
-    const { userMessage, senderChatId } = body;
+type UserType = {
+  chatId: bigint | number;
+  isDeletedBot?: boolean;
+};
 
-    if (!userMessage) {
-      return new Response(JSON.stringify({ message: "Нет текста сообщения" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
 
-    const users = await prisma.user.findMany({
-      where: {isDeletedBot: false},
-      select: { chatId: true },
-    });
+function chunkArray(array: UserType[], size: number): UserType[][]{
+const result : UserType[][] = [];
+for (let i = 0; i < array.length; i += size) {
+  result.push(array.slice(i,i + size));
+}
+return result;
+}
 
-    let successCount = 0;
-    let removedCount = 0;
+async function sendBatch (usersBatch: UserType[], userMessage: string) {
+  let successCount = 0;
+  let removedCount = 0;
 
-    //отправка пользователям рассылки !
-     for (const user of users) {
+    for (const user of usersBatch) {
          try {
       const res = await fetch(TELEGRAM_API, {
         method: "POST",
@@ -49,23 +46,70 @@ export async function POST(request: NextRequest) {
           where: { chatId: BigInt(user.chatId) },
           data: { isDeletedBot: true },
         });
+
+
         removedCount++;
         console.log(`Удален пользователь ${user.chatId}- бот заблокирован.`);
+
+
       } else if (data.ok) {
         successCount++;
       }
+
+      //небольшая задержка перед отправкой 80мс 
       await new Promise((res) => setTimeout(res, 80));
     } catch (err) {
       console.error(`Ошибка при отправке пользователю ${user.chatId}:`, err);
     }
      }
+     return {successCount, removedCount}
+}
+
+
+
+export async function POST(request: NextRequest) {
+  try {
+    const body: RequestBody = await request.json();
+    const { userMessage, senderChatId } = body;
+
+    if (!userMessage) {
+      return new Response(JSON.stringify({ message: "Нет текста сообщения" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const users = await prisma.user.findMany({
+      where: {isDeletedBot: false},
+      select: { chatId: true },
+    });
+
+      const batches = chunkArray(users, 100);
+
+     let totalSent = 0;
+     let totalRemoved = 0;
    
+   for (let i = 0; i < batches.length; i++) {
+    console.log(`отправка батча ${i + 1}/${batches.length}`);
+    const {successCount, removedCount} = await sendBatch(
+      batches[i],
+      userMessage
+    );
+    totalSent += successCount;
+    totalRemoved += removedCount;
+   
+    if (i < batches.length - 1) {
+      console.log(`пауза перед следующим батчем`);
+      await new Promise((r)=>setTimeout(r,70_000));
+    }
+
+   }
 
     await prisma.newsletterLog.create({
       data: {
         message: userMessage,
-        sentCount: successCount,
-        removedCount: removedCount,
+        sentCount: totalSent,
+        removedCount: totalRemoved,
         createdById: senderChatId ? BigInt(senderChatId) : null,
       },
     });
@@ -73,8 +117,8 @@ export async function POST(request: NextRequest) {
     return new Response(
       JSON.stringify({
         message: "Сообщение успешно отправлено",
-        sent: successCount,
-        removed: removedCount,
+        sent: totalSent,
+        removed: totalRemoved,
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
