@@ -15,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
        <head>
+        <meta name="yandex-verification" content="311d7ed1ad318aa9" />
         <Script 
           src="https://telegram.org/js/telegram-web-app.js?58" 
           strategy="beforeInteractive"/>
