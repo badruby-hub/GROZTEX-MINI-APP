@@ -34,12 +34,13 @@ export default function HeaderSwitcher() {
     })
     },[]);
       
-  if (isAdmin === null) return null; 
-  return isAdmin ? (
+  if (isAdmin === null) {
+  return (
         <>
        <AdminHeader /> 
        <Header />
-      </> ) : "";
+      </> ) ;
+  }
   
 
 }
