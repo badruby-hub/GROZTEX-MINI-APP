@@ -27,11 +27,9 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { chatId: BigInt(chatId) },
-    });
+    const user = process.env.NEXT_PUBLIC_ADMIN_CHAT_IDS;
 
-    return NextResponse.json({ isAdmin: user?.isAdmin || false });
+    return NextResponse.json({ isAdmin: user || false });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Ошибка проверки админа" }, { status: 500 });
