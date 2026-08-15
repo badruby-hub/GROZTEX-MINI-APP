@@ -19,7 +19,7 @@ export default function Header() {
     }
 
      
-     return<header className={classes.block__content__home}>
+     return<section className={classes.block__content__home}>
         <nav className={classes.App}>
           <div className={classes.logo}><div className={classes.logo__name}>{/*<div className={classes.shadow}></div>*/}GROZ
              <svg className={classes.tether} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" height="80" viewBox="0 0 48 48">
@@ -56,5 +56,5 @@ export default function Header() {
          </div>
 
         </nav>
-     </header>
+     </section>
 }

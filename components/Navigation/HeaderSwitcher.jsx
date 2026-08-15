@@ -1,8 +1,8 @@
 "use client";
 import AdminHeader from "./Header-admin";
 import Header from "./Header";
-import { useEffect, useState } from "react";
-import NProgress from "nprogress";
+// import { useEffect, useState } from "react";
+// import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
 export default function HeaderSwitcher() {
@@ -37,8 +37,8 @@ export default function HeaderSwitcher() {
 
   return (
         <>
+        <Header />
        <AdminHeader /> 
-       <Header />
       </> ) ;
   
   

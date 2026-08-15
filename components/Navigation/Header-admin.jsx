@@ -20,7 +20,7 @@ export default function AdminHeader(){
     }
  
      
-     return<header className={classes.block__content__home}>
+     return<section className={classes.block__content__home}>
         <nav className={classes.App}>
           <div className={classes.logo}><div className={classes.logo__name}>{/*<div className={classes.shadow}></div>*/}GROZ
              <svg className={classes.tether} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"  height="80" viewBox="0 0 48 48">
@@ -29,7 +29,7 @@ export default function AdminHeader(){
              s4.711,2.635,11,2.929V36h6V24.929C33.289,24.635,38,23.436,38,22z M24,24c-6.627,0-12-1.007-12-2.25c0-1.048,3.827-1.926,9-2.176
              v3.346c0.96,0.06,1.96,0.08,3,0.08s2.04-0.02,3-0.08v-3.346c5.173,0.25,9,1.128,9,2.176C36,22.993,30.627,24,24,24z"></path>
              </svg>EX</div>
-             <div className={classes.logo__title}>best exchange</div></div>
+             <div className={classes.logo__title}>dashboard</div></div>
             <ul className={classes.ul}>
                <li className={`${classes.administrator} ${classes.li}`}>
                   <Link className={classes.link} href="/users-control">Управление пользователями</Link>
@@ -49,5 +49,5 @@ export default function AdminHeader(){
                <li onClick={onClose} className={`${classes.close} ${classes.li}`}><div className={classes.btn__close}>Закрыть приложение</div></li>
             </ul>
         </nav>
-     </header>
+     </section>
 }
