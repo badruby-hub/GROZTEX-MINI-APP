@@ -118,7 +118,7 @@ const getUserRoleLabel = (user) => {
   return "Клиент";
 };
 
-  const filteredUsers = result.filter((user) => {
+  const filteredUsers = result?.filter((user) => {
     const query = debouncedSearch.toLowerCase();
     return (
       user.firstName?.toLowerCase().includes(query) ||
