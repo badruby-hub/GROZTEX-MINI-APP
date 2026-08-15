@@ -118,15 +118,15 @@ const getUserRoleLabel = (user) => {
   return "Клиент";
 };
 
-  const filteredUsers = result?.filter((user) => {
-    const query = debouncedSearch.toLowerCase();
-    return (
-      user.firstName?.toLowerCase().includes(query) ||
-      user.lastName?.toLowerCase().includes(query) ||
-      user.userName?.toLowerCase().includes(query) ||
-      user.chatId?.toString().includes(query)
-    );
-  });
+  // const filteredUsers = result?.filter((user) => {
+  //   const query = debouncedSearch.toLowerCase();
+  //   return (
+  //     user.firstName?.toLowerCase().includes(query) ||
+  //     user.lastName?.toLowerCase().includes(query) ||
+  //     user.userName?.toLowerCase().includes(query) ||
+  //     user.chatId?.toString().includes(query)
+  //   );
+  // });
 
     return  <div className={classes.container__users}>
          <h1 className={classes.zagolovok}>Карточки пользователей</h1>
@@ -142,7 +142,7 @@ const getUserRoleLabel = (user) => {
           <div className={classes.block__count__users}><h4>Пользователей:<span className={classes.count__users}>{result.length}</span> </h4><Sletter/></div>
           
           <div className={classes.block__cards}>
-         {isLoading? <Loader/> : filteredUsers.map((user)=>{
+         {/* {isLoading? <Loader/> : filteredUsers.map((user)=>{
          return <div className={classes.card} key={user.id}>
       <div className={classes.cardHeader}>
         <span className={classes.role}>
@@ -175,8 +175,8 @@ const getUserRoleLabel = (user) => {
             
       </div>
     </div>
- })
+ }) */}
 
-} </div> 
+ </div> 
 {!isLoading && <BtnBackHome/>} </div>
 }
