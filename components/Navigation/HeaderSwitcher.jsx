@@ -35,6 +35,6 @@ export default function HeaderSwitcher() {
     },[]);
       
   if (isAdmin === null) return null; 
-  return isAdmin ?   <AdminHeader /> : <Header />;
+  return isAdmin ?   <AdminHeader /> && <Header /> : "";
 
 }
